@@ -1,0 +1,353 @@
+<!doctype html>
+<html>
+	<head>
+		<title>统一上传组件开发页面 - 腾讯视频</title>
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+		<style>
+			html{color:#333;background-color:#fff;-webkit-text-size-adjust:100%;-ms-text-size-adjust:100%;_text-overflow:ellipsis}
+			body,dl,dt,dd,ul,ol,li,h1,h2,h3,h4,h5,h6,pre,code,form,fieldset,legend,input,textarea,select,p,blockquote,th,td,hr,button,article,aside,details,figcaption,figure,footer,header,hgroup,menu,nav,section{margin:0;padding:0}
+			body,button,input,select,textarea{font:12px/1.5 tahoma,arial}
+			h1,h2,h3,h4,h5,h6{font-size:1em}
+			a{text-decoration:none}
+			a:hover{text-decoration:underline}
+			a:active{outline:0 none}
+			#container{
+				padding-top: 30px;
+				width: 960px;
+				min-height: 600px;
+				margin: 0 auto;
+				font-family: "Microsoft Yahei", tahoma;
+			}
+			.btn{
+				position: absolute;
+				width: 100px;
+				height: 40px;
+				padding: 5px;
+				line-height: 40px;
+				border: 5px solid #ccc;
+				background-color: #007EBE;
+				color: #fff;
+				font-size: 16px;
+				font-weight: bold;
+				text-align: center;
+				cursor: pointer;
+			}
+			.disabled{
+				cursor: default;
+				background-color: #999;
+				color: #ddd;
+			}
+			#btn_ftn{
+				left: 25%;
+				top: 50%;
+				margin-left: -60px;
+				margin-top: -30px;
+			}
+			#btn_html5{
+				left: 50%;
+				top: 50%;
+				margin-left: -60px;
+				margin-top: -30px;
+			}
+			#btn_flash{
+				left: 75%;
+				top: 50%;
+				margin-left: -60px;
+				margin-top: -30px;
+			}
+			#drop{
+				position: relative;
+				width: 800px;
+				height: 360px;
+				margin: 0 auto 0;
+				background-color: #eee;
+			}
+			#drop .drop_text{
+				width: 755px;
+				padding-top: 60px; 
+				margin: 0 auto;
+				line-height: 210px;
+				color: #ddd;
+				font-size: 230px;
+				text-align: center;
+				display: none;
+			}
+
+			#drop.over{
+				border: 5px dotted #999;
+				margin-top: -5px;
+			}
+
+			#drop.over #drop_text1{
+				display: block;
+			}
+			#drop.over.in #drop_text1{
+				display: none;
+			}
+			#drop.over.in #drop_text2{
+				display: block;
+			}
+			#drop_tip{
+				display: none;
+				width: 150px;
+				margin-left: -75px;
+				position: absolute;
+				left: 50%;
+				bottom: 10px;
+				font-size: 14px;
+				text-align: center;
+				color: #999;
+			}
+			#files{
+				width: 800px;
+				margin: 30px auto 0;
+			}
+			.file{
+				position: relative;
+				margin-top: 15px;
+				padding: 10px;
+				background-color: #eee;
+			}
+			.name{
+				padding: 5px 0;
+				color: #369;
+				font-size: 18px;
+			}
+			.error .name{
+				color: #c00;
+			}
+			.size{
+				padding-bottom: 3px;
+			}
+			.filebtn{
+				position: absolute;
+				right: 10px;
+				top: 15px;
+				color: #369;
+				display: none;
+			}
+		</style>
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0, minimum-scale=1.0, maximum-scale=1.0" />
+		<meta name="apple-mobile-web-app-capable" content="yes" />
+		<meta name="apple-mobile-web-app-status-bar-style" content="black" />
+		<meta name="HandheldFriendly" content="true"/>
+		<meta name="format-detection" content="telephone=no" />
+		<script type="text/javascript">
+			try{document.domain="qq.com";}catch(e){}
+		</script>
+		<!--<script type="text/javascript" src="require.js"></script>-->
+		<!--<script type="text/javascript" src="sea-debug.js"></script>-->
+		<!--<script type="text/javascript" src="jquery-1.10.2.js"></script>-->
+		<script type="text/javascript" src="http://qzs.qq.com/tencentvideo_v1/js/txv.core.min.js"></script>
+		<script type="text/javascript" src="http://qzs.qq.com/tencentvideo_v1/tvu/js/tvu.uploader.js"></script>
+		<!-- <script type="text/javascript" src="http://qzs.qq.com/tencentvideo_v1/tvu/js/tvu.uploader.html5.js"></script> -->
+	</head>
+	<body>
+		<div id="container">
+			<div id="drop">
+				<span id="drop_text1" class="drop_text">放这里</span>
+				<span id="drop_text2" class="drop_text">松手吧</span>
+				<span id="drop_tip">拖文件过来试试</span>
+				<div id="btn_ftn" class="btn disabled">FTN上传</div>
+				<div id="btn_html5" class="btn disabled">HTML5上传</div>
+				<div id="btn_flash" class="btn disabled">FLASH上传</div>
+			</div>
+			<div id="files"></div>
+			
+
+
+		</div>
+		<script id="file_tpl" type="text/tpl">
+			<div class="file{if errorCode!=0} error{/if}" id="f_${uid}">
+				<div class="name">${name}</div>
+				<div class="info">大小：${size|getSizeString}　模式：${typeText}</div>
+				<div class="status">{if errorCode==0}等待上传{else}校验失败　错误码：${errorCode}　错误信息：${errorMsg}{/if}</div>
+				<a href="javascript:;" data-uid="${uid}" class="filebtn cancel">取消</a>
+				<a href="javascript:;" data-uid="${uid}" class="filebtn retry">重试</a>
+			</div>
+		</script>
+
+		<script type="text/javascript">
+			Live.noConflict();
+			$ = $j;
+
+			txv.common.initPage({
+	            needGoToLoginPage: true,
+	            needWinSafariHack: true,
+	            alwaysShowMytvMenu: true
+	        });
+
+			var dropZone = $('#drop'),
+				btnFtn = $('#btn_ftn'),
+				btnHtml5 = $('#btn_html5'),
+				btnFlash = $('#btn_flash'),
+				dropTip = $('#drop_tip'),
+				fios = {};
+
+	        if (!Live.login.isLogin()) {
+	            txv.common.gotoLoginPage();
+	        }else{
+				// $.getScript('tvu.uploader.js');
+				// require(['pagemain.js'], function(main) {
+				// });
+				// seajs.use('pagemain.js', function(){
+				// });
+				tvu.init({
+					uin: Live.login.getUin(),
+					g_tk: $.getToken(),
+					businessType: tvu.BusinessType.BOKE,
+					//businessType: tvu.BusinessType.COMMON,
+					businessID: 3,
+
+					// uploadType: tvu.UploadType.FTN,
+					// uploadType: tvu.UploadType.HTML5,
+					// uploadType: tvu.UploadType.FLASH,
+					useMultiUploadType: true,
+
+					maxQueueParallelNum: 3,
+
+					// selectButton: $('#btn'),
+					useMultiSelect: true,
+
+					dropTarget: dropZone.get(0),
+
+					onFileSelect : function(fioArr){
+						if(fioArr && fioArr.length >0){
+							for(var i = 0, len = fioArr.length; i < len; i++){
+								(function(fio){
+									addFile(fio, function (){
+										fios[fio.uid] = fio;
+										if(fio.errorCode != 0){
+											setStatus(fio.uid, '校验失败　错误码：' + fio.errorCode + '　错误信息：' + fio.errorMsg);
+										} else {
+											if(tvu.addToQueue(fio)){
+												tvu.startQueue();
+											}
+										}
+									});
+								}(fioArr[i]));
+							}
+						}
+					},
+					onFileStart: function (fio) {
+						toggleCancelBtn(fio.uid, true);
+					},
+					onFileScanProgress: function (fio) {
+						setStatus(fio.uid, '扫描中　' + fio.percent + '%　已完成：' + tvu.getSizeString(fio.processedSize) + '　瞬时速度：' + tvu.getSizeString(fio.instantSpeed) + '/S　平均速度：' + tvu.getSizeString(fio.averageSpeed) + '/S');
+					},
+					onFileUploadStart: function (fio) {
+						var info = $('#f_' + fio.uid).find('.info');
+						info.html(info.html() + '　视频ID：' + fio.vid);
+						setStatus(fio.uid, '准备上传');
+					},
+					onFileUploadProgress: function (fio) {
+						setStatus(fio.uid, '上传中　' + fio.percent + '%　已完成：' + tvu.getSizeString(fio.processedSize) + '　瞬时速度：' + tvu.getSizeString(fio.instantSpeed) + '/S　平均速度：' + tvu.getSizeString(fio.averageSpeed) + '/S');
+					},
+					onFileSuccess: function (fio) {
+						toggleCancelBtn(fio.uid, false);
+						setStatus(fio.uid, '上传成功');
+					},
+					onFileError: function (fio) {
+						toggleCancelBtn(fio.uid, false);
+						toggleRetryBtn(fio.uid, true);
+						toggleError(fio.uid, true);
+						setStatus(fio.uid, '上传失败　错误码：' + fio.errorCode + '　错误信息：' + fio.errorMsg);
+					},
+					onDragEnterPage:function(){
+						dropZone.addClass('over');
+					},
+					onDragLeavePage:function(){
+						dropZone.removeClass('over');
+					},
+					onDragEnterTarget:function(){
+						dropZone.addClass('in');
+					},
+					onDragLeaveTarget:function(){
+						dropZone.removeClass('in');
+					},
+					onDropTarget:function(){
+					},
+
+					debug: true
+				});
+
+				if(tvu.hasFtn()){
+					btnFtn.removeClass('disabled');
+					tvu.setSelectButton(btnFtn, tvu.UploadType.FTN);
+				}else{
+					btnFtn.attr('title', '点击去安装FTN控件');
+					btnFtn.click(function() {
+						window.location.href = tvu.getInstallFtnUrl(window.location.href);
+					});
+				}
+
+				if(tvu.hasHtml5()){
+					dropTip.show();
+					btnHtml5.removeClass('disabled');
+					tvu.setSelectButton(btnHtml5, tvu.UploadType.HTML5);
+				}
+				if(tvu.hasFtn()){
+					btnFlash.removeClass('disabled');
+				}
+				tvu.setSelectButton(btnFlash, tvu.UploadType.FLASH);
+				
+				Live.template.MODIFIERS.getSizeString = tvu.getSizeString;
+
+				$('#files').on('click', '.cancel', function(){
+					var btn = $(this),
+						uid = btn.data('uid');
+					if(tvu.cancel(fios[uid])){
+						btn.hide();
+						setStatus(uid, '已取消');
+					}
+				});
+				$('#files').on('click', '.retry', function(){
+					var btn = $(this),
+						uid = btn.data('uid');
+					if(tvu.addToQueue(fios[uid])){
+						tvu.startQueue();
+						btn.hide();
+						setStatus(uid, '准备上传');
+						toggleError(uid, false);
+					}
+				});
+
+				function addFile(fio, callback) {
+					var fileData = $.extend({}, fio);
+					if(fileData.uploadType == tvu.UploadType.FTN){
+						fileData.typeText = 'FTN';
+					}else if(fileData.uploadType == tvu.UploadType.HTML5){
+						fileData.typeText = 'HTML5';
+					}else{
+						fileData.typeText = 'FLASH';
+					}
+					Live.template.fillHtml(fileData, 'file_tpl', 'files', false, null, Live.template.FILL_TYPE.TPL_ID, callback);
+				}
+				function setStatus(uid, txt){
+					var status = $('#f_' + uid).find('.status');
+					status.html(txt);
+				}
+				function toggleCancelBtn(uid, show){
+					var cancel = $('#f_' + uid).find('.cancel');
+					cancel.toggle(!!show);
+				}
+				function toggleRetryBtn(uid, show){
+					var retry = $('#f_' + uid).find('.retry');
+					retry.toggle(!!show);
+				}
+				function toggleError(uid, show){
+					var file = $('#f_' + uid);
+					file.toggleClass('error', !!show);
+				}
+
+
+				// $('#btn').click(function(){
+					// tvu.openSelectFileWindow();
+				// });
+
+				// tvu.selectFile('F:\\Videos\\许巍.-.[留声十年绝版青春北京演唱会].(dvdrip)带字幕\\许巍.-.[留声十年绝版青春北京演唱会].(dvdrip).avi','k0117yyusxw');
+
+	        }
+		</script>
+	</body>
+</html>
