@@ -136,7 +136,7 @@ tvu.flashUploader = (function() {
 
 			fileName = decodeURIComponent(fileName);
 
-			fio = new tvu.FileInfo(tvu.global.UploadType.FLASH, fileSize, fileName);
+			fio = new tvu.FileInfo(tvu.global.UploadType.FLASH, fileSize, fileName, '', config.common.uploadInfo);
 			fio.errorCode = code;
 			fio.uploadKey = fio.uid;
 			fioArr.push(fio);

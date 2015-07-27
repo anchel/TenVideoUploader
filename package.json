@@ -17,17 +17,14 @@
     "grunt-contrib-uglify": "~0.2.5",
     "grunt-contrib-clean": "~0.5.0",
     "grunt-contrib-watch": "~0.6.1",
-    "grunt-contrib-copy": "~0.5.0",
-    "karma": "~0.12.6",
-    "karma-chrome-launcher": "~0.1.3",
-    "karma-jasmine": "~0.2.2"
+    "grunt-contrib-copy": "~0.5.0"
   },
   "author": {
     "team": "Tencent-Video Web Front End Team",
     "members": "popotang komahu grubbyliu jarvanxing walkerwang derekma xingkaiwang ameliexu"
   },
   "cfg": {
-    "releasePath": "../../release/tencentvideo_v1/tvu/js/",
-    "debugPath": "../../release/tencentvideo_v1/tvu/_debug_/"
+    "releasePath": "../../../../release/tencentvideo_v1/tvu/js/ftnh5/",
+    "debugPath": "../../../../release/tencentvideo_v1/tvu/_debug_/ftnh5/"
   }
 }

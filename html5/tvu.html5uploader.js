@@ -28,7 +28,7 @@ tvu.html5Uploader = (function() {
 			var uid,
 				fio;
 
-			fio = new tvu.FileInfo(tvu.global.UploadType.HTML5, file.size, file.name);
+			fio = new tvu.FileInfo(tvu.global.UploadType.HTML5, file.size, file.name, '', config.common.uploadInfo);
 			fio.uploadKey = file.uploadKey;
 
 			return fio;

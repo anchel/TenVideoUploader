@@ -144,6 +144,17 @@ tvu.FileInfo = function(uploadtype, size, name, path, option) {
      * @type {string}
      */
     this.cgi = !!option ? option.cgi  : '';
+    
+    /**
+     * 微信公众号的appid
+     */
+    this.appid = !!option ? option.appid  : '';
+    
+    /**
+     * 微信公众号的pluginsession
+     */
+    this.pluginsession = !!option ? option.pluginsession  : '';
+    
 	/**
 	 * 视频版权，1原创、2转载
 	 * @type {Number}

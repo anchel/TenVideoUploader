@@ -5,12 +5,14 @@ tvu.global = {
 		BOKE: 'boke',
 		QZONE: 'qzone',
 		WEIBO: 'weibo',
-        CLASS: 'class'
+        CLASS: 'class',
+        WEIXIN : 'weixin'
 	},
 	UploadType: {
-		FTN: 1,
+		FTN: 2,
 		HTML5: 3,
-		FLASH: 2
+		FLASH: 1,
+		FTN_HTML5: 4
 	},
 	UploadStatus: {
 		READY: 0,
@@ -48,6 +50,9 @@ tvu.global = {
 			case tvu.global.UploadType.FTN:
 				name = 'ftn';
 				break;
+			case tvu.global.UploadType.FTN_HTML5:
+                name = 'ftnhtml5';
+                break;
 			case tvu.global.UploadType.HTML5:
 				name = 'html5';
 				break;

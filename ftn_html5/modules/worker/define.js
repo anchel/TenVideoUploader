@@ -1,0 +1,3 @@
+
+self.tvu = self.tvu || {};
+

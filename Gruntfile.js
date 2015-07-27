@@ -12,6 +12,20 @@ module.exports = function(grunt) {
 				banner: '<%= banner %>',
 				stripBanners: false
 			},
+			tenvideouploader_worker: {
+                src: [
+                    './ftn_html5/util/CommonUtil.js',
+                    './ftn_html5/modules/worker/define.js',
+                    './ftn_html5/modules/ConstDef.js',
+                    './ftn_html5/modules/DataDict.js',
+                    './ftn_html5/modules/algorithm/md5-spark.js',
+                    './ftn_html5/modules/algorithm/sha1-calculator.js',
+                    './ftn_html5/modules/algorithm/sha1-rusha.js',
+                    './ftn_html5/modules/worker/alg-main.js',
+                    './ftn_html5/modules/worker/upload-main.js'
+                ],
+                dest: '<%= pkg.cfg.releasePath %>tvu.uploader.worker.js'
+            },
 			tenvideouploader_all: {
 				src: [
 					'./core/tvu.intro.js',
@@ -24,6 +38,19 @@ module.exports = function(grunt) {
 					'./base/tvu.baseuploader.js',
 					'./ftn/tvu.ftnconfig.js',
 					'./ftn/tvu.ftnuploader.js',
+					
+					'./ftn_html5/tvu.ftnhtml5config.js',
+					
+					'./ftn_html5/util/CommonUtil.js',
+					'./ftn_html5/modules/base/namespace.js',
+                    './ftn_html5/modules/base/Emitter.js',
+                    './ftn_html5/modules/ConstDef.js',
+                    './ftn_html5/modules/DataDict.js',
+                    './ftn_html5/modules/worker-adapter/workerAdapter.js',
+                    './ftn_html5/modules/upload/upload.core.js',
+
+                    './ftn_html5/tvu.ftnhtml5uploader.js',
+					
 					'./html5/tvu.html5config.js',
 					'./html5/tvu.html5uploader.js',
 					'./html5/tvu.html5uploader.core.js',
@@ -35,27 +62,6 @@ module.exports = function(grunt) {
 				],
 				dest: '<%= pkg.cfg.releasePath %>tvu.uploader.js'
 			}
-			// ,
-			// tenvideouploader_html5: {
-			// 	src: [
-			// 		'./core/tvu.intro.js',
-			// 		'./lib/zepto.js',
-			// 		'./lib/tvu.$.extend.js',
-			// 		'./base/tvu.util.js',
-			// 		'./base/tvu.global.js',
-			// 		'./base/tvu.baseconfig.js',
-			// 		'./base/tvu.reporter.js',
-			// 		'./base/tvu.fileinfo.js',
-			// 		'./base/tvu.baseuploader.js',
-			// 		'./html5/tvu.html5config.js',
-			// 		'./html5/tvu.html5uploader.js',
-			// 		'./html5/tvu.html5uploader.core.js',
-			// 		'./core/tvu.queue.js',
-			// 		'./core/tvu.uploader.js',
-			// 		'./core/tvu.outro.js'
-			// 	],
-			// 	dest: '<%= pkg.cfg.releasePath %>tvu.uploader.html5.js'
-			// }
 		},
 		uglify: {
 			options: {
@@ -82,19 +88,10 @@ module.exports = function(grunt) {
 				tasks: ['dev']
 			},
 			options: {
-				interval: 250,
+				interval: 250
 			}
 		},
 		copy: {
-			// qzs233swf: {
-			// 	files: [{
-			// 		expand: true,
-			// 		cwd: './flash/',
-			// 		src: ['tvu.flashuploader.swf'],
-			// 		dest: 'V:/tvu/swf/',
-			// 		filter: 'isFile'
-			// 	}]
-			// },
 			source: {
 				files: [{
 					expand: true,
@@ -107,11 +104,17 @@ module.exports = function(grunt) {
 			qzs233: {
 				files: [{
 					expand: true,
-					cwd: '<%= pkg.cfg.releasePath %>',
+					cwd: '<%= pkg.cfg.debugPath %>',
 					src: ['**/*.js'],
-					dest: 'V:/tvu/js/',
+					dest: 'V:/tvu/_debug_/ftnh5/',
 					filter: 'isFile'
-				}]
+				},{
+                    expand: true,
+                    cwd: '<%= pkg.cfg.releasePath %>',
+                    src: ['**/*.js'],
+                    dest: 'V:/tvu/js/ftnh5/',
+                    filter: 'isFile'
+                }]
 			},
 			vqq252: {
 				files: [{

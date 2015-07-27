@@ -1,0 +1,43 @@
+/**
+ * 一些常量的定义 
+ */
+
+(function(global, factory){
+    
+    tvu.ftnhtml5 = tvu.ftnhtml5 || {};
+    tvu.ftnhtml5.CONST_DEF = factory();
+    
+})(self || window, function(){
+    var CONST_DEF = {
+        EventType : {
+            SEND : {
+                FILE_SCAN : 11,
+                FILE_SCAN_CANCEL : 12,
+                
+                BUF_SCAN : 21,
+                
+                FILE_UPLOAD : 31,
+                FILE_UPLOAD_CANCEL : 32
+            },
+            REPLY : {
+                SCAN_START : 11,
+                SCAN_ING : 12,
+                SCAN_SUCCESS : 13,
+                SCAN_CANCEL : 14,
+                SCAN_ERROR : 15,
+                
+                UPLOAD_START : 21,
+                UPLOAD_ING : 22,
+                UPLOAD_SUCCESS : 23,
+                UPLOAD_CANCEL : 24,
+                UPLOAD_ERROR : 25
+            }
+        },
+        AlgType : {
+            MD5 : 1,
+            SHA1 : 2
+        }
+    };
+    
+    return CONST_DEF;
+});

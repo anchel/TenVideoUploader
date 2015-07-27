@@ -21,7 +21,7 @@ tvu.config.flash = {
 	 * 申请上传cgi参数列表
 	 * @type {Array}
 	 */
-	tcgiParamKeys: ['vid', 'type', 'tags', 'cat', 'act', 'title', 'folder', 'orifname', 'size', 'uptype', 'key'],
+	tcgiParamKeys: ['vid', 'bid', 'type', 'tags', 'cat', 'act', 'title', 'folder', 'orifname', 'size', 'uptype', 'key'],
 	/**
 	 * 申请上传cgi请求方式
 	 * @type {String}
@@ -36,7 +36,7 @@ tvu.config.flash = {
 	 * 上传cgi参数列表
 	 * @type {Array}
 	 */
-	upcgiParamKeys: ['fid', 'vid', 'type', 'tags', 'cat', 'act', 'title', 'folder', 'fsize'],
+	upcgiParamKeys: ['fid', 'vid', 'bid', 'type', 'tags', 'cat', 'act', 'title', 'folder', 'fsize'],
 	/**
 	 * flash链接地址
 	 * @type {String}

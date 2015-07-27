@@ -111,6 +111,7 @@ tvu.html5Uploader.core = (function() {
 					return;
 				}
 				onSelect(fileArr);
+				inputObj.value = ''; //清空以便能重新出发 change 事件
 			}, false);
 			// });
 		}

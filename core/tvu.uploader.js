@@ -15,7 +15,7 @@ tvu.uploader = (function() {
 			 */
 			businessType: tvu.global.BusinessType.COMMON,
 			/**
-			 * 上传模式，FTN、HTML5、FLASH，默认会自动按FTN、HTML5、FLASH顺序依次降级进行选择，并设置
+			 * 上传模式，FTN、FTN_HTML5、HTML5、FLASH，默认会自动按FTN、FTN_HTML5、HTML5、FLASH顺序依次降级进行选择，并设置
 			 * @type {Number}
 			 */
 			uploadType: 0,
@@ -82,6 +82,10 @@ tvu.uploader = (function() {
 					config.ftn.autoRetry = true;
 					config.ftn.tcgi = 'http://c.v.qq.com/fvupready';
 				}
+				if (config.ftnhtml5) {
+                    config.ftnhtml5.autoRetry = true;
+                    config.ftnhtml5.tcgi = 'http://c.v.qq.com/fvupready';
+                }
 				if (config.flash) {
 					config.flash.tcgi = 'http://c.v.qq.com/vupready';
 					config.flash.upcgi = 'http://uu.video.qq.com/v1/vupvideo';
@@ -122,12 +126,49 @@ tvu.uploader = (function() {
 					config.flash.upcgi = 'http://ut.video.qq.com/v1/tupvideo';
 				}
 				break;
+			case tvu.global.BusinessType.WEIXIN: //微信公众号上传
+                config.common.sort = 400;
+                if (config.ftn) {  //微信公众号上传暂时不用FTN方式
+                    config.ftn.tcgi = 'http://c.v.qq.com/openfvupready';
+                    config.ftn.tcgiHttpMethod = 'get';
+                }
+                if (config.flash) {
+                    if(location.protocol == 'https:'){
+                        config.flash.tcgi = 'https://sec.video.qq.com/p/c.v/wxvupready';
+                        config.flash.upcgi = 'https://sec.video.qq.com/p/uu.video/v1/wxvupvideo';
+                        config.flash.src = 'https://imgcache.qq.com/tencentvideo_v1/tvu/swf/tvu.flashuploader.swf';
+                    }else{
+                        config.flash.tcgi = 'http://c.v.qq.com/wxvupready';
+                        config.flash.upcgi = 'http://uu.video.qq.com/v1/wxvupvideo';
+                        config.flash.src = 'http://imgcache.qq.com/tencentvideo_v1/tvu/swf/tvu.flashuploader.swf';
+                    }
+                    config.flash.tcgiHttpMethod = 'get'; //
+                    config.flash.tcgiParamKeys = ['bid', 'appid', 'pluginsession'];
+                    config.flash.upcgiParamKeys = ['bid', 'vid', 'fid', 'fsize', 'appid', 'pluginsession'];
+                }
+                if (config.html5) {
+                    if(location.protocol == 'https:'){
+                        config.html5.tcgi = 'https://sec.video.qq.com/p/c.v/wxvupready';
+                        config.html5.upcgi = 'https://sec.video.qq.com/p/uu.video/v1/wxvupvideo';
+                    }else{
+                        config.html5.tcgi = 'http://c.v.qq.com/wxvupready';
+                        config.html5.upcgi = 'http://uu.video.qq.com/v1/wxvupvideo';
+                    }
+                    config.html5.tcgiHttpMethod = 'get'; //
+                    config.html5.tcgiParamKeys = ['bid', 'appid', 'pluginsession'];
+                    config.html5.upcgiParamKeys = ['bid', 'vid', 'fid', 'fsize', 'appid', 'pluginsession'];
+                }
+                break;
 			case tvu.global.BusinessType.COMMON:
 			default:
 				config.common.sort = 400;
 				if (config.ftn) {
 					config.ftn.tcgi = 'http://c.v.qq.com/openfvupready';
 				}
+				if (config.ftnhtml5) {
+                    config.ftnhtml5.autoRetry = true;
+                    config.ftnhtml5.tcgi = 'http://c.v.qq.com/openfvupready';
+                }
 				if (config.flash) {
 					config.flash.tcgi = 'http://c.v.qq.com/openvupready';
 					config.flash.tcgiHttpMethod = 'post'; //
@@ -184,7 +225,7 @@ tvu.uploader = (function() {
 
 	function initUploaders() {
 		var useMultiUploadType = option.useMultiUploadType,
-			initOrderArr = [tvu.global.UploadType.FTN, tvu.global.UploadType.HTML5, tvu.global.UploadType.FLASH],
+			initOrderArr = [tvu.global.UploadType.FTN, tvu.global.UploadType.FTN_HTML5, tvu.global.UploadType.HTML5, tvu.global.UploadType.FLASH],
 			tmpUploadType,
 			tmpUploader;
 
@@ -399,6 +440,11 @@ tvu.uploader = (function() {
 			var uploader = tvu.global.getUploader(tvu.global.UploadType.HTML5);
 			return (uploader && uploader.isSupport());
 		},
+		
+		hasFtnHtml5: function() {
+            var uploader = tvu.global.getUploader(tvu.global.UploadType.FTN_HTML5);
+            return (uploader && uploader.isSupport());
+        },
 
 		// hasFlash: function() {
 		// 	return tvu.flashUploader.isSupport();

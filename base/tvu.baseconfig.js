@@ -139,7 +139,9 @@ tvu.config = {
             tags: '',
             cat: '',
             desc: '',
-            platform: ''
+            platform: '',
+            appid : '',
+            pluginsession : ''
         }
 	}
 };
